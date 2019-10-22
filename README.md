@@ -1,2 +1,2 @@
-# kappa-vedi-bot
-A telegram bot for Kappa Vedi community
+# phoenix-combot
+A telegram bot for Phoenix community
