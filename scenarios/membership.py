@@ -14,7 +14,7 @@ def try_membership_management(ctx: Context, database: Database):
     if not database.is_admin(ctx.user_object):
         return ctx
     # member management
-    if re.match('(добавь|добавить) (члена|членов)( в коммьюнити)?', ctx.text_normalized):
+    if re.match('(добавь|добавить) (члена|членов|людей)( в коммьюнити)?', ctx.text_normalized):
         ctx.intent = 'MEMBER_ADD_INIT'
         ctx.response = 'Введите логин/логины новых членов коммьюнити в Telegram через пробел.'
     elif ctx.last_intent == 'MEMBER_ADD_INIT':
@@ -27,7 +27,7 @@ def try_membership_management(ctx: Context, database: Database):
                 continue
             existing = database.mongo_membership.find_one({'username': login, 'is_member': True})
             if existing is None:
-                database.mongo_membership.update_one({'username': login}, {'$set': {'is_member': True}}, upsert=True)
+                database.mongo_membership.update_one({'username': login}, {'$set': {'is_member': True}}, kvpsert=True)
                 resp = resp + '\n@{} успешно добавлен(а) в список членов.'.format(login)
             else:
                 resp = resp + '\n@{} уже является членом коммьюнити.'.format(login)
