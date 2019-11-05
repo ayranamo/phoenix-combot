@@ -14,9 +14,9 @@ def try_membership_management(ctx: Context, database: Database):
     if not database.is_admin(ctx.user_object):
         return ctx
     # member management
-    if re.match('(добавь|добавить) (члена|членов)( в клуб| клуба)?', ctx.text_normalized):
+    if re.match('(добавь|добавить) (члена|членов)( в коммьюнити)?', ctx.text_normalized):
         ctx.intent = 'MEMBER_ADD_INIT'
-        ctx.response = 'Введите телеграмовский логин/логины новых членов через пробел.'
+        ctx.response = 'Введите телеграмовский логин/логины новых членов коммьюнити через пробел.'
     elif ctx.last_intent == 'MEMBER_ADD_INIT':
         ctx.intent = 'MEMBER_ADD_COMPLETE'
         logins = [matchers.normalize_username(c.strip(',').strip('@').lower()) for c in ctx.text.split()]
@@ -30,6 +30,6 @@ def try_membership_management(ctx: Context, database: Database):
                 database.mongo_membership.update_one({'username': login}, {'$set': {'is_member': True}}, upsert=True)
                 resp = resp + '\n@{} успешно добавлен(а) в список членов.'.format(login)
             else:
-                resp = resp + '\n@{} уже является членом клуба.'.format(login)
+                resp = resp + '\n@{} уже является членом коммьюнити.'.format(login)
         ctx.response = resp
     return ctx

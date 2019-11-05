@@ -45,7 +45,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
             ctx.response = 'Чтобы пользоваться пиплбуком, нужно иметь имя пользователя в Телеграме.' \
                            '\nПожалуйста, создайте себе юзернейм (ТГ > настройки > изменить профиль > ' \
                            'имя пользователя) и попробуйте снова.\nВ случае ошибки напишите @cointegrated.' \
-                           '\nЕсли вы есть, будьте первыми!'
+                           '\n\U0001F525'
             return ctx
         the_profile = database.mongo_peoplebook.find_one({'username': ctx.user_object['username']})
         if the_profile is None:

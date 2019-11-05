@@ -65,7 +65,7 @@ def remind_about_coffee(user_obj, matches, database: Database, sender: Callable,
     for m in matches:
         in_pb = database.mongo_peoplebook.find_one({'username': m})
         if in_pb:
-            match_texts.append('@{} (<a href="http://kv-peoplebook.herokuapp.com/person/{}">пиплбук</a>)'.format(m, m))
+            match_texts.append('@{} (<a href="http://.herokuapp.com/person/{}">пиплбук</a>)'.format(m, m))
         else:
             match_texts.append('@{}'.format(m))
 
@@ -81,7 +81,7 @@ def remind_about_coffee(user_obj, matches, database: Database, sender: Callable,
         # todo: remember the feedback (with expected_intent)
     elif datetime.today().weekday() == 0:  # monday
         response = 'Напоминаю, что на этой неделе вы пьёте кофе {}.\n'.format(with_whom) + \
-            '\nНадеюсь, вы уже договорились о встрече?	\U0001f609' + \
+            '\nВы уже договорились о встрече?	\U0001f609' + \
             '\n(если в минувшую субботу пришло несколько оповещений о кофе, то действительно только последнее)'
     if response is not None:
         user_in_pb = database.mongo_peoplebook.find_one({'username': user_obj.get('username')})
@@ -89,7 +89,7 @@ def remind_about_coffee(user_obj, matches, database: Database, sender: Callable,
             response = response + '\n\nКстати, кажется, вас нет в пиплбуке, а жаль: ' \
                                   'с пиплбуком даже незнакомому собеседнику проще будет начать с вами общение.' \
                                   '\nПожалуйста, когда будет время, напишите мне "мой пиплбук" ' \
-                                  'и заполните свою страничку.\nЕсли вы есть, будьте первыми!'
+                                  'и заполните свою страничку.\n \U0001F525'
         # avoiding circular imports
         from scenarios.suggests import make_standard_suggests
         suggests = make_standard_suggests(database=database, user_object=user_obj)
@@ -104,16 +104,16 @@ def try_coffee_management(ctx: Context, database: Database):
     if ctx.text == TAKE_PART or coffee_score == 1:
         if ctx.user_object.get('username') is None:
             ctx.intent = 'COFFEE_NO_USERNAME'
-            ctx.response = 'Чтобы участвовать в random coffee, нужно иметь имя пользователя в Телеграме.' \
+            ctx.response = 'Чтобы участвовать в Random coffee, нужно иметь имя пользователя в Telegram.' \
                            '\nПожалуйста, создайте себе юзернейм (ТГ > настройки > изменить профиль > ' \
-                           'имя пользователя) и попробуйте снова.\nВ случае ошибки напишите @cointegrated.' \
-                           '\nЕсли вы есть, будьте первыми!'
+                           'имя пользователя) и попробуйте снова.\nВ случае ошибки напишите @terrainco.' \
+                           '\n \U0001F525'
             return ctx
         ctx.the_update = {"$set": {'wants_next_coffee': True}}
-        ctx.response = 'Окей, на следующей неделе вы будете участвовать в random coffee!'
+        ctx.response = 'Окей, на следующей неделе вы будете участвовать в Random coffee \U0001F44C'
         ctx.intent = 'TAKE_PART'
     elif ctx.text == NOT_TAKE_PART or coffee_score == -1:
         ctx.the_update = {"$set": {'wants_next_coffee': False}}
-        ctx.response = 'Окей, на следующей неделе вы не будете участвовать в random coffee!'
+        ctx.response = 'Окей, на следующей неделе вы не будете участвовать в Random coffee \U0001F44C'
         ctx.intent = 'NOT_TAKE_PART'
     return ctx

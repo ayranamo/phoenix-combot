@@ -12,7 +12,7 @@ from utils.database import Database
 from utils.dialogue_management import Context
 from utils import matchers
 
-PEOPLEBOOK_EVENT_ROOT = 'http://kv-peoplebook.herokuapp.com/event/'
+PEOPLEBOOK_EVENT_ROOT = 'http://phoenix-peoplebook.herokuapp.com/event/'
 
 
 class InvitationStatuses:
@@ -108,11 +108,11 @@ def render_full_event(ctx: Context, database: Database, the_event):
 
 
 def make_invitation(invitation, database: Database):
-    r = 'Здравствуйте! Вы были приглашены пользователем @{} на встречу Каппа Веди.\n'.format(invitation['invitor'])
+    r = 'Здравствуйте! Вы были приглашены пользователем @{} на мероприятие Phoenix.\n'.format(invitation['invitor'])
     event_code = invitation.get('code', '')
     the_event = database.mongo_events.find_one({'code': event_code})
     if event_code == '' or the_event is None:
-        return 'Я не смог найти встречу, напишите @cointegrated пожалуйста.', 'ERROR', []
+        return 'Я не смог найти встречу, напишите @terrainco, пожалуйста.', 'ERROR', []
     r = r + format_event_description(the_event)
     r = r + '\nВы сможете участвовать в этой встрече?'
     suggests = ['Да', 'Нет', 'Пока не знаю']
@@ -129,7 +129,7 @@ def try_invitation(ctx: Context, database: Database):
         new_status = None
         event_code = ctx.user_object.get('event_code')
         if event_code is None:
-            ctx.response = 'Почему-то не удалось получить код встречи, сообщите @cointegrated'
+            ctx.response = 'Почему-то не удалось получить код встречи, сообщите @terrainco'
         elif matchers.is_like_yes(ctx.text_normalized):
             new_status = InvitationStatuses.ACCEPT
             ctx.intent = EventIntents.ACCEPT
@@ -140,20 +140,20 @@ def try_invitation(ctx: Context, database: Database):
                     + '<a href="{}{}">пиплбуке встречи</a>.'.format(PEOPLEBOOK_EVENT_ROOT, event_code) \
                     + '\nДля этого, когда будете готовы, напишите мне "мой пиплбук"' \
                     + ' и ответьте на пару вопросов о себе.'\
-                    + '\nЕсли вы есть, будьте первыми!'
+                    + '\n\U0001F525'
             else:
                 t = '\nВозможно, вы хотите обновить свою страничку в ' \
                     + '<a href="{}{}">пиплбуке встречи</a>.'.format(PEOPLEBOOK_EVENT_ROOT, event_code) \
                     + '\nДля этого, когда будете готовы, напишите мне "мой пиплбук"' \
                     + ' и ответьте на пару вопросов о себе.' \
-                    + '\nЕсли вы есть, будьте первыми!'
+                    + '\n\U0001F525'
             ctx.response = ctx.response + t
             # todo: tell the details and remind about money
         elif matchers.is_like_no(ctx.text_normalized):
             new_status = InvitationStatuses.REJECT
             ctx.intent = EventIntents.REJECT
             ctx.response = 'Мне очень жаль, что у вас не получается. ' \
-                           'Но, видимо, такова жизнь. Если вы есть, будьте первыми!'
+                           'Но, видимо, такова жизнь.'
             # todo: ask why the user rejects it
         elif re.match('пока не знаю', ctx.text_normalized):
             new_status = InvitationStatuses.ON_HOLD
@@ -229,7 +229,7 @@ def try_event_usage(ctx: Context, database: Database):
             ctx.the_update = {'$set': {'event_code': event_code}}
             ctx.response = render_full_event(ctx, database, the_event)
             if database.is_admin(ctx.user_object):
-                ctx.suggests.append('Пригласить всех членов клуба')
+                ctx.suggests.append('Пригласить всех членов коммьюнити')
     elif event_code is not None and (
             ctx.text == '/engage' or re.match('^(участвовать|принять участие)( в этой встрече)?$', ctx.text_normalized)
     ):
@@ -270,7 +270,7 @@ def try_event_usage(ctx: Context, database: Database):
                 event_user_filter, {'$set': {'payment_status': InvitationStatuses.PAYMENT_PAID}}, upsert=True
             )
     elif ctx.last_expected_intent == 'EVENT_REPORT_PAYMENT_DETAILS':
-        ctx.response = 'Спасибо за предоставленную информацию. \nЕсли вы есть, будьте первыми!'
+        ctx.response = 'Спасибо за предоставленную информацию. \n\U0001F525'
         ctx.intent = 'EVENT_REPORT_PAYMENT_DETAILS'
         database.mongo_participations.update_one(
             event_user_filter, {'$set': {'payment_details': ctx.text}}, upsert=True
@@ -294,7 +294,7 @@ def try_event_usage(ctx: Context, database: Database):
                 ctx.response = 'Хорошо! Сейчас пригласим гостя на встречу "{}".'.format(event_code)
                 ctx.response = ctx.response + '\nВведите Telegram логин человека, которого хотите пригласить.'
         else:
-            ctx.response = 'Вы не являетесь членом клуба, и поэтому не можете приглашать гостей. Сорян.'
+            ctx.response = 'Вы не являетесь членом коммьюнити, и поэтому не можете приглашать гостей. Сорян.'
             ctx.intent = 'EVENT_INVITE_UNAUTHORIZED'
     elif ctx.last_expected_intent == 'EVENT_INVITE_LOGIN':
         ctx.intent = 'EVENT_INVITE_LOGIN'
@@ -446,7 +446,7 @@ def try_event_creation(ctx: Context, database: Database):
             database.mongo_events.insert_one(event_to_create)
             ctx.the_update = {'$set': {'event_code': event_to_create['code']}}
             ctx.response = 'Хорошо, дата встречи будет "{}". '.format(ctx.text) + '\nВстреча успешно создана!'
-            ctx.suggests.append('Пригласить всех членов клуба')
+            ctx.suggests.append('Пригласить всех членов коммьюнити')
     elif event_code is not None:  # this event is context-independent, triggers at any time just by text
         if re.match('пригласить (всех|весь).*', ctx.text_normalized) or ctx.text == '/invite_everyone':
             # todo: deduplicate this as well
@@ -459,14 +459,14 @@ def try_event_creation(ctx: Context, database: Database):
                 ctx.response = 'Событие "{}" уже состоялось, вы не можете приглашать гостей.'.format(event_code)
             else:
                 ctx.intent = 'INVITE_EVERYONE'
-                ctx.response = 'Действительно пригласить всех членов клуба на встречу "{}"?'.format(event_code)
+                ctx.response = 'Действительно пригласить всех членов коммьюнити на встречу "{}"?'.format(event_code)
                 ctx.suggests.extend(['Да', 'Нет'])
         elif ctx.last_intent == 'INVITE_EVERYONE' and matchers.is_like_no(ctx.text_normalized):
             ctx.intent = 'INVITE_EVERYONE_NOT_CONFIRM'
             ctx.response = 'Ладно.'
         elif ctx.last_intent == 'INVITE_EVERYONE' and matchers.is_like_yes(ctx.text_normalized):
             ctx.intent = 'INVITE_EVERYONE_CONFIRM'
-            r = 'Приглашаю всех членов клуба...\n'
+            r = 'Приглашаю всех членов коммьюнити...\n'
             for member in database.mongo_membership.find({'is_member': True}):
                 # todo: deduplicate the code with single-member invitation
                 the_login = member['username']
@@ -526,7 +526,7 @@ EVENT_EDITION_COMMANDS = '\n'.join(
     ['{} - задать {}'.format(e.command, e.name_accs) for e in EVENT_FIELDS] +
     [
         "/remove_event - удалить событие и отменить все приглашения",
-        "/invite_everyone - пригласить всех членов клуба",
+        "/invite_everyone - пригласить всех членов коммьюнити",
         "/invitation_statuses - посмотреть статусы приглашений",
         "/invitation_statuses_excel - выгрузить статусы приглашений",
         "/report_others_payment - сообщить о статусе оплаты участника",
@@ -578,7 +578,7 @@ def try_event_edition(ctx: Context, database: Database):
         ctx.intent = 'EVENT_GET_INVITATION_STATUSES'
         event_members = list(database.mongo_participations.find({'code': event_code}))
         if len(event_members) == 0:
-            ctx.response = 'Пока в этой встрече совсем нет участников. Если вы есть, будьте первыми!!!'
+            ctx.response = 'Пока в этой встрече совсем нет участников. \U0001F525!!!'
         else:
             statuses = [InvitationStatuses.translate(em['status'], em.get('payment_status')) for em in event_members]
             descriptions = '\n'.join([
@@ -802,7 +802,7 @@ def daily_event_management(database: Database, sender: Callable):
                        'Пожалуйста, сделайте это заранее!' \
                        '\n Если вы уже оплатили, пожалуйста, сообщите об этом, ' \
                        'нажав кнопку "Сообщить об оплате".' \
-                       '\nЕсли вы есть, будьте первыми!'.format(
+                       '\n\U0001F525!'.format(
                             user_account.get('first_name', 'товарищ ' + user_account.get('username', 'Анонимус')),
                             event['days_to'] + 1,
                             invitation['code']
@@ -823,7 +823,7 @@ def daily_event_management(database: Database, sender: Callable):
                 )
                 text = text + format_event_description(event)
                 text = text + '\nСоветую вам полистать пиплбук встречи заранее, чтобы нетворкаться на ней эффективнее.'
-                text = text + '\nЕсли вы есть, будьте первыми! \U0001f60e'
+                text = text + '\n\U0001F525 \U0001f60e'
                 intent = EventIntents.NORMAL_REMINDER
                 suggests = make_standard_suggests(database=database, user_object=user_account)
                 if sender(text=text, database=database, suggests=suggests, user_id=user_account['tg_id']):
@@ -878,7 +878,7 @@ def get_name(username, database):
 
 def get_membership(username, database, invitor=None):
     if database.is_at_least_member({'username': username}):
-        return 'Член клуба'
+        return 'Член коммьюнити'
     else:
         if invitor is None:
             return 'Гость'

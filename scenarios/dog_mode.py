@@ -9,7 +9,6 @@ def doggy_style(ctx: Context, database: Database):
         ctx.intent = 'DOG'
         name = ctx.user_object.get('first_name', 'мудила ' + ctx.user_object.get('username', 'Анонимус'))
         ctx.response = random.choice([
-            'Скажи это Жонибеку, псина \U0001F415',
             'Я сяду тебе на лицо, если не завалишь ебало \U0001F483',
             'Ты охуел, пёс?',
             'На хуй иди, ' + name,
