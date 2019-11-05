@@ -217,7 +217,7 @@ def render_text_profile(profile, editable=True):
         '{}'.format(profile.get('topics', '')),
         '<b>Контакты</b>',
         profile.get('contacts', 't.me/{}'.format(profile.get('username', ''))),
-        '\n<a href="kv-peoplebook.herokuapp.com/person/{}">как это выглядит на сайте</a> (с фото)'.format(
+        '\n<a href="phoenix-peoplebook.herokuapp.com/person/{}">как это выглядит на сайте</a> (с фото)'.format(
             profile.get('username', 'does_not_exist')
         ),
     ]
