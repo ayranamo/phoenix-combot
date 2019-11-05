@@ -16,7 +16,7 @@ def try_membership_management(ctx: Context, database: Database):
     # member management
     if re.match('(добавь|добавить) (члена|членов)( в коммьюнити)?', ctx.text_normalized):
         ctx.intent = 'MEMBER_ADD_INIT'
-        ctx.response = 'Введите телеграмовский логин/логины новых членов коммьюнити через пробел.'
+        ctx.response = 'Введите логин/логины новых членов коммьюнити в Telegram через пробел.'
     elif ctx.last_intent == 'MEMBER_ADD_INIT':
         ctx.intent = 'MEMBER_ADD_COMPLETE'
         logins = [matchers.normalize_username(c.strip(',').strip('@').lower()) for c in ctx.text.split()]

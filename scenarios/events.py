@@ -324,7 +324,7 @@ def try_event_usage(ctx: Context, database: Database):
                 )
                 r = 'Юзер @{} был добавлен в список участников встречи!'.format(the_login)
                 if never_used_this_bot:
-                    r = r + '\nПередайте ему/ей ссылку на меня (@kappa_vedi_bot), ' \
+                    r = r + '\nПередайте ему/ей ссылку на меня (@phoenix_combot), ' \
                             'чтобы подтвердить участие и заполнить пиплбук (увы, бот не может писать первым).'
                 else:
                     sent_invitation_to_user(the_login, event_code, database, ctx.sender)
@@ -846,12 +846,12 @@ def daily_event_management(database: Database, sender: Callable):
         #        # we send notifications only to guests of an event.
         #        continue
         #    text = "Привет!\n" \
-        #           "Надеюсь, тебе понравилась вчерашняя встреча Каппа Веди?\n" \
+        #           "Надеюсь, тебе понравилась вчерашняя встреча?\n" \
         #           "В любом случае, мы будем рады, если ты оставишь свою обратную связь о встрече." \
         #           "Для этого мы сделали небольшую анкету, минут на 3-5: http://bit.ly/kvfeedback.\n" \
-        #           "Если ты хочешь присоединиться клубу, ты можешь заполнить заявку на вступление" \
-        #           "по ссылке http://bit.ly/welcome2kv. Мы рассмотрим её на ближайшей оргвстрече клуба.\n" \
-        #           "Спасибо за участие во встрече клуба. Если вы есть, будьте первыми!"
+        #           "Если ты хочешь присоединиться, ты можешь заполнить заявку на вступление" \
+        #           "по ссылке http://bit.ly/welcome2kv. Мы рассмотрим её на ближайшей оргвстрече.\n" \
+        #
         #    sender(text=text, database=database, user_id=user_account['tg_id'], reset_intent=True,
         #           intent='event_feedback_push')
         #            time.sleep(0.5)

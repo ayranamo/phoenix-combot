@@ -42,7 +42,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
     if re.match('(покажи )?(мой )?(профиль (в )?)?(пиплбук|peoplebook)', ctx.text_normalized):
         if ctx.user_object.get('username') is None:
             ctx.intent = PB.PEOPLEBOOK_NO_USERNAME
-            ctx.response = 'Чтобы пользоваться пиплбуком, нужно иметь имя пользователя в Телеграме.' \
+            ctx.response = 'Чтобы пользоваться пиплбуком, нужно иметь имя пользователя в Telegram.' \
                            '\nПожалуйста, создайте себе юзернейм (ТГ > настройки > изменить профиль > ' \
                            'имя пользователя) и попробуйте снова.\nВ случае ошибки напишите @cointegrated.' \
                            '\n\U0001F525'

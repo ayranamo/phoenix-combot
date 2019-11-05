@@ -12,8 +12,8 @@ from config import ADMIN_UID
 
 import time
 
-TAKE_PART = 'Участвовать в следующем кофе'
-NOT_TAKE_PART = 'Не участвовать в следующем кофе'
+TAKE_PART = 'Участвовать в следующем Random coffee'
+NOT_TAKE_PART = 'Не участвовать в следующем Random coffee'
 
 
 def get_coffee_score(text):
@@ -75,7 +75,7 @@ def remind_about_coffee(user_obj, matches, database: Database, sender: Callable,
 
     response = None
     if force_restart or datetime.today().weekday() == 5:  # saturday
-        response = 'На этой неделе вы пьёте кофе {}.\nЕсли вы есть, будьте первыми!'.format(with_whom)
+        response = 'На этой неделе вы пьёте кофе {}.\n \U0001F525'.format(with_whom)
     elif datetime.today().weekday() == 4:  # friday
         response = 'На этой неделе вы, наверное, пили кофе {}.\nКак оно прошло?'.format(with_whom)
         # todo: remember the feedback (with expected_intent)
