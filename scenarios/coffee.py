@@ -12,8 +12,8 @@ from config import ADMIN_UID
 
 import time
 
-TAKE_PART = 'Участвовать в следующем Random coffee'
-NOT_TAKE_PART = 'Не участвовать в следующем Random coffee'
+TAKE_PART = 'Участвовать в Random coffee'
+NOT_TAKE_PART = 'Не участвовать в Random coffee'
 
 
 def get_coffee_score(text):
