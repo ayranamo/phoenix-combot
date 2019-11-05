@@ -379,7 +379,7 @@ def try_event_creation(ctx: Context, database: Database):
     if re.match('созда(ть|й) встречу', ctx.text_normalized):
         ctx.intent = EventCreationIntents.INIT
         ctx.expected_intent = EventCreationIntents.SET_TITLE
-        ctx.response = 'Придумайте название встречи (например, Встреча Каппа Веди 27 апреля):'
+        ctx.response = 'Придумайте название встречи (например, День рождения Феникса):'
         ctx.the_update = {'$set': {'event_to_create': {}}}
         ctx.suggests.append('Отменить создание встречи')
     elif re.match('отменить создание встречи', ctx.text_normalized):
