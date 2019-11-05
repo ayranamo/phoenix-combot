@@ -39,7 +39,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
         return ctx
     # first process the incoming info
     within = ctx.user_object.get(PB.CREATING_PB_PROFILE)
-    if re.match('(покажи )?(мой )?(профиль (в )?)?(пиплбук|peoplebook)', ctx.text_normalized):
+    if re.match('(покажи |открой )?(мой )?(профиль (в )?)?(пиплбук|peoplebook)', ctx.text_normalized):
         if ctx.user_object.get('username') is None:
             ctx.intent = PB.PEOPLEBOOK_NO_USERNAME
             ctx.response = 'Чтобы пользоваться peoplebook, нужно иметь имя пользователя в Telegram.' \
