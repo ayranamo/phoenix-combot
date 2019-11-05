@@ -31,8 +31,9 @@ TELEBOT_URL = 'telebot_webhook/'
 BASE_URL = 'https://phoenix-combot.herokuapp.com/'
 
 MONGO_URL = os.environ.get('MONGODB_URI')
+print(MONGO_URL, "примерно так!")
 DATABASE = Database(MONGO_URL, admins={
-    'cointegrated', 'terrainco',
+    'cointegrated', 'terrainco'
 })
 
 if os.environ.get('SENTRY_DSN'):
