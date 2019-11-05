@@ -6,7 +6,7 @@ def make_standard_suggests(database, user_object):
 
     if database.is_at_least_guest(user_object):
         suggests.append('Покажи встречи')
-        suggests.append('Открой пиплбук')
+        suggests.append('Открой peoplebook')
         suggests.append(TAKE_PART if not user_object.get('wants_next_coffee') else NOT_TAKE_PART)
 
     if database.is_admin(user_object):
