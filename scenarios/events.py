@@ -137,14 +137,14 @@ def try_invitation(ctx: Context, database: Database):
             the_peoplebook = database.mongo_peoplebook.find_one({'username': ctx.username})
             if the_peoplebook is None:
                 t = '\nЧтобы встреча прошла продуктивнее, пожалуйста, заполните свою страничку в ' \
-                    + '<a href="{}{}">пиплбуке встречи</a>.'.format(PEOPLEBOOK_EVENT_ROOT, event_code) \
-                    + '\nДля этого, когда будете готовы, напишите мне "мой пиплбук"' \
+                    + '<a href="{}{}">peoplebook встречи</a>.'.format(PEOPLEBOOK_EVENT_ROOT, event_code) \
+                    + '\nДля этого, когда будете готовы, напишите мне "мой peoplebook"' \
                     + ' и ответьте на пару вопросов о себе.'\
                     + '\n\U0001F525'
             else:
                 t = '\nВозможно, вы хотите обновить свою страничку в ' \
-                    + '<a href="{}{}">пиплбуке встречи</a>.'.format(PEOPLEBOOK_EVENT_ROOT, event_code) \
-                    + '\nДля этого, когда будете готовы, напишите мне "мой пиплбук"' \
+                    + '<a href="{}{}">peoplebook встречи</a>.'.format(PEOPLEBOOK_EVENT_ROOT, event_code) \
+                    + '\nДля этого, когда будете готовы, напишите мне "мой peoplebook"' \
                     + ' и ответьте на пару вопросов о себе.' \
                     + '\n\U0001F525'
             ctx.response = ctx.response + t
@@ -325,7 +325,7 @@ def try_event_usage(ctx: Context, database: Database):
                 r = 'Юзер @{} был добавлен в список участников встречи!'.format(the_login)
                 if never_used_this_bot:
                     r = r + '\nПередайте ему/ей ссылку на меня (@phoenix_combot), ' \
-                            'чтобы подтвердить участие и заполнить пиплбук (увы, бот не может писать первым).'
+                            'чтобы подтвердить участие и заполнить peoplebook (увы, бот не может писать первым).'
                 else:
                     sent_invitation_to_user(the_login, event_code, database, ctx.sender)
                 ctx.response = r
@@ -540,7 +540,7 @@ def format_event_description(event_dict):
     for field in EVENT_FIELDS:
         if event_dict.get(field.code, '') != '':
             result = result + '\n\t<b>{}</b>: \t{}'.format(field.name, event_dict.get(field.code))
-    result = result + '\n\t<b>пиплбук встречи</b>: <a href="{}{}">ссылка</a>\n'.format(
+    result = result + '\n\t<b>peoplebook встречи</b>: <a href="{}{}">ссылка</a>\n'.format(
         PEOPLEBOOK_EVENT_ROOT, event_dict.get('code')
     )
     return result
@@ -822,7 +822,7 @@ def daily_event_management(database: Database, sender: Callable):
                     event['days_to'] + 1
                 )
                 text = text + format_event_description(event)
-                text = text + '\nСоветую вам полистать пиплбук встречи заранее, чтобы нетворкаться на ней эффективнее.'
+                text = text + '\nСоветую вам полистать peoplebook встречи заранее, чтобы нетворкаться на ней эффективнее.'
                 text = text + '\n\U0001F525 \U0001f60e'
                 intent = EventIntents.NORMAL_REMINDER
                 suggests = make_standard_suggests(database=database, user_object=user_account)

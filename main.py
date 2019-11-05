@@ -33,7 +33,7 @@ BASE_URL = 'https://phoenix-combot.herokuapp.com/'
 MONGO_URL = os.environ.get('MONGODB_URI')
 print(MONGO_URL, "примерно так!")
 DATABASE = Database(MONGO_URL, admins={
-    'cointegrated', 'terrainco'
+    'cointegrated', 'terrainco', "asinak", "soch42", "Smi1e_for_you"
 })
 
 if os.environ.get('SENTRY_DSN'):

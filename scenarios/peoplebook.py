@@ -42,7 +42,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
     if re.match('(покажи )?(мой )?(профиль (в )?)?(пиплбук|peoplebook)', ctx.text_normalized):
         if ctx.user_object.get('username') is None:
             ctx.intent = PB.PEOPLEBOOK_NO_USERNAME
-            ctx.response = 'Чтобы пользоваться пиплбуком, нужно иметь имя пользователя в Telegram.' \
+            ctx.response = 'Чтобы пользоваться peoplebook, нужно иметь имя пользователя в Telegram.' \
                            '\nПожалуйста, создайте себе юзернейм (ТГ > настройки > изменить профиль > ' \
                            'имя пользователя) и попробуйте снова.\nВ случае ошибки напишите @cointegrated.' \
                            '\n\U0001F525'
@@ -50,7 +50,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
         the_profile = database.mongo_peoplebook.find_one({'username': ctx.user_object['username']})
         if the_profile is None:
             ctx.intent = PB.PEOPLEBOOK_GET_FAIL
-            ctx.response = 'У вас ещё нет профиля в пиплбуке. Завести?'
+            ctx.response = 'У вас ещё нет профиля в peoplebook. Завести?'
             ctx.suggests.append('Да')
             ctx.suggests.append('Нет')
         else:
@@ -62,7 +62,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
             ctx.expected_intent = PB.PEOPLEBOOK_SET_FIRST_NAME
             database.mongo_peoplebook.insert_one({'username': ctx.user_object['username']})
             ctx.the_update = {'$set': {PB.CREATING_PB_PROFILE: True}}
-            ctx.response = 'Отлично! Создаём профиль в пиплбуке.'
+            ctx.response = 'Отлично! Создаём профиль в peoplebook.'
         elif matchers.is_like_no(ctx.text_normalized):
             ctx.intent = PB.PEOPLEBOOK_DO_NOT_CREATE
             ctx.response = 'На нет и суда нет.'
@@ -171,7 +171,7 @@ def try_peoplebook_management(ctx: Context, database: Database):
             the_profile = database.mongo_peoplebook.find_one({'username': ctx.user_object['username']})
             if the_profile is None:
                 ctx.intent = PB.PEOPLEBOOK_GET_FAIL
-                ctx.response = 'У вас ещё нет профиля в пиплбуке. Завести?'
+                ctx.response = 'У вас ещё нет профиля в peoplebook. Завести?'
                 ctx.suggests.append('Да')
                 ctx.suggests.append('Нет')
             else:
