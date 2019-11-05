@@ -27,7 +27,7 @@ def try_membership_management(ctx: Context, database: Database):
                 continue
             existing = database.mongo_membership.find_one({'username': login, 'is_member': True})
             if existing is None:
-                database.mongo_membership.update_one({'username': login}, {'$set': {'is_member': True}}, kvpsert=True)
+                database.mongo_membership.update_one({'username': login}, {'$set': {'is_member': True}}, upsert=True)
                 resp = resp + '\n@{} успешно добавлен(а) в список членов.'.format(login)
             else:
                 resp = resp + '\n@{} уже является членом коммьюнити.'.format(login)
