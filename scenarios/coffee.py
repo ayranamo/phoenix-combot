@@ -65,7 +65,7 @@ def remind_about_coffee(user_obj, matches, database: Database, sender: Callable,
     for m in matches:
         in_pb = database.mongo_peoplebook.find_one({'username': m})
         if in_pb:
-            match_texts.append('@{} (<a href="http://.herokuapp.com/person/{}">пиплбук</a>)'.format(m, m))
+            match_texts.append('@{} (<a href="http://phoenix-peoplebook.herokuapp.com/person/{}">пиплбук</a>)'.format(m, m))
         else:
             match_texts.append('@{}'.format(m))
 
@@ -86,9 +86,9 @@ def remind_about_coffee(user_obj, matches, database: Database, sender: Callable,
     if response is not None:
         user_in_pb = database.mongo_peoplebook.find_one({'username': user_obj.get('username')})
         if not user_in_pb:
-            response = response + '\n\nКстати, кажется, вас нет в пиплбуке, а жаль: ' \
-                                  'с пиплбуком даже незнакомому собеседнику проще будет начать с вами общение.' \
-                                  '\nПожалуйста, когда будет время, напишите мне "мой пиплбук" ' \
+            response = response + '\n\nКстати, кажется, вас нет в peoplebook, а жаль: ' \
+                                  'с заполненным профилем даже незнакомому собеседнику проще будет начать с вами общение.' \
+                                  '\nПожалуйста, когда будет время, напишите мне "мой peoplebook" ' \
                                   'и заполните свою страничку.\n \U0001F525'
         # avoiding circular imports
         from scenarios.suggests import make_standard_suggests
